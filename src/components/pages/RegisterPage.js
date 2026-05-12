@@ -52,7 +52,7 @@ export default function RegisterPage() {
           <p className="text-muted">Creá tu cuenta</p>
         </div>
 
-        <<div className="card" style={{ background: 'rgba(26, 16, 53, 0.9)', backdropFilter: 'blur(16px)', border: '1px solid rgba(157, 95, 255, 0.25)' }}>
+        <div className="card" style={{ background: 'rgba(26, 16, 53, 0.9)', backdropFilter: 'blur(16px)', border: '1px solid rgba(157, 95, 255, 0.25)' }}>
           <h2 className="section-title" style={{ marginBottom: 'var(--space-5)' }}>Registro</h2>
 
           {error && <div className="alert alert-error">{error}</div>}
