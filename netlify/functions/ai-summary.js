@@ -1,4 +1,4 @@
-const Anthropic = require("@anthropic-ai/sdk");
+const Groq = require("groq-sdk");
 const { connectDB, getDB, corsHeaders, verifyToken } = require("./_db");
 
 exports.handler = async (event) => {
@@ -68,15 +68,19 @@ exports.handler = async (event) => {
     ? `Intolerancias: ${userProfile.intolerances.join(", ")}`
     : "";
 
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-  const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
+  const completion = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
     max_tokens: 800,
     messages: [
       {
+        role: "system",
+        content: "Sos una asistente nutricional empática y motivadora que responde en español argentino.",
+      },
+      {
         role: "user",
-        content: `Sos una asistente nutricional empática y motivadora. Analizá el registro alimentario ${period === "weekly" ? "semanal" : "mensual"} de ${userProfile?.name || "la usuaria"} y generá un resumen amigable en español argentino.
+        content: `Analizá el registro alimentario ${period === "weekly" ? "semanal" : "mensual"} de ${userProfile?.name || "la usuaria"} y generá un resumen amigable.
 
 DATOS DE SALUD:
 ${conditionsText}
@@ -98,7 +102,7 @@ Sé concisa, cálida y práctica. Evitá ser alarmista. Máximo 400 palabras.`,
     ],
   });
 
-  const summary = message.content[0].text;
+  const summary = completion.choices[0].message.content;
 
   // Guardar en caché
   await db.collection("ai_summaries").findOneAndUpdate(
