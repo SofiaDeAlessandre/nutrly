@@ -4,49 +4,31 @@
    ============================================================ */
 
 :root {
-  /* Primary palette */
-  --mint-50:  #f0fdf6;
-  --mint-100: #dcfce9;
-  --mint-200: #bbf7d4;
-  --mint-300: #86efb5;
-  --mint-400: #4ade85;
-  --mint-500: #22c55e;
-  --mint-600: #16a34a;
+   /* Primary palette - nueva paleta */
+  --mint-50:  #f0fffe;
+  --mint-100: #ccfff8;
+  --mint-200: #99fff2;
+  --mint-300: #4dfce8;
+  --mint-400: #00f5d4;
+  --mint-500: #00d4b4;
+  --mint-600: #00a896;
 
-  --violet-50:  #f5f3ff;
-  --violet-100: #ede9fe;
-  --violet-200: #ddd6fe;
-  --violet-300: #c4b5fd;
-  --violet-400: #a78bfa;
-  --violet-500: #8b5cf6;
-  --violet-600: #7c3aed;
+  --violet-50:  #f5f0ff;
+  --violet-100: #ede0ff;
+  --violet-200: #d4b8ff;
+  --violet-300: #b98aff;
+  --violet-400: #9d5fff;
+  --violet-500: #8040e8;
+  --violet-600: #6a2fd4;
 
-  --berry-300: #f9a8d4;
-  --berry-400: #f472b6;
-  --berry-500: #ec4899;
-
-  --cream:    #fefdf8;
-  --surface:  #ffffff;
-  --neutral-100: #f4f4f5;
-  --neutral-200: #e4e4e7;
-  --neutral-400: #a1a1aa;
-  --neutral-600: #52525b;
-  --neutral-800: #27272a;
-  --neutral-900: #18181b;
-
-  /* Semantic tokens (fácil de cambiar) */
-  --color-primary:       var(--mint-500);
+  /* Semánticos */
+  --color-primary:       var(--mint-400);
   --color-primary-light: var(--mint-100);
   --color-primary-dark:  var(--mint-600);
   --color-accent:        var(--violet-500);
   --color-accent-light:  var(--violet-100);
   --color-accent-dark:   var(--violet-600);
-  --color-highlight:     var(--berry-400);
-  --color-bg:            var(--cream);
-  --color-surface:       var(--surface);
-  --color-text:          var(--neutral-900);
-  --color-text-muted:    var(--neutral-600);
-  --color-border:        var(--neutral-200);
+  --color-bg:            #f8f7ff;
 
   /* Typography */
   --font-display: 'Fraunces', Georgia, serif;
