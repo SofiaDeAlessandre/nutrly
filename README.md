@@ -1,136 +1,90 @@
-# 🍓 Nutrly — Proyecto Final esencIA
+# 🍓 Nutrly — Tu diario nutricional inteligente
 
 App de seguimiento nutricional personal con IA.  
-**Stack:** React · Netlify Functions · MongoDB Atlas · Claude API
+**Proyecto Final — programa esencIA (Google.org)**  
+🌐 **[nutrly.netlify.app](https://nutrly.netlify.app)**
 
 ---
 
-## 🚀 Pasos para levantar el proyecto
+## ¿Qué es Nutrly?
 
-### 1. Prerequisitos
-- Node.js 18+ instalado
-- Cuenta en [MongoDB Atlas](https://cloud.mongodb.com) (gratis)
-- Cuenta en [Netlify](https://netlify.com) (gratis)
-- API Key de [Anthropic](https://console.anthropic.com)
+Nutrly es una app web que permite a usuarias registrar sus comidas diarias eligiendo entre las opciones de su plan alimentario mensual. La IA analiza los registros y genera resúmenes semanales y mensuales personalizados, considerando condiciones digestivas e intolerancias de cada persona.
 
 ---
 
-### 2. Instalar dependencias
+## Stack tecnológico
 
-```bash
-# Dependencias del frontend (React)
-npm install
-
-# Dependencias de las Netlify Functions
-cd netlify/functions
-npm install
-cd ../..
-```
-
----
-
-### 3. Configurar variables de entorno
-
-Copiá `.env.example` como `.env.local` en la raíz:
-
-```bash
-cp .env.example .env.local
-```
-
-Completá los valores:
-
-```
-MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/nutriapp
-JWT_SECRET=una_clave_secreta_larga_y_aleatoria
-ANTHROPIC_API_KEY=sk-ant-...
-```
+| Capa | Tecnología |
+|---|---|
+| Frontend | React 18, React Router, Recharts |
+| Estilos | CSS Variables (dark theme violeta + aqua) |
+| Backend | Netlify Functions (serverless) |
+| Base de datos | MongoDB Atlas |
+| Autenticación | JWT + bcrypt |
+| IA | Groq API — modelo Llama 3.3 70B |
+| Deploy | Netlify (CI/CD desde GitHub) |
+| Keep-alive | cron-job.org (ping cada 12 horas) |
 
 ---
 
-### 4. Crear la base de datos en MongoDB Atlas
+## Funcionalidades
 
-1. Creá un cluster gratuito en [MongoDB Atlas](https://cloud.mongodb.com)
-2. Creá un usuario de base de datos (Database Access)
-3. Permitís acceso desde cualquier IP: `0.0.0.0/0` (Network Access)
-4. Copiás el connection string en `MONGODB_URI`
-5. Corré el script de seed para crear colecciones e índices:
-
-```bash
-node scripts/seed-mongodb.js
-```
-
-Este script crea:
-- Colección `allowed_emails` con el email de test de la profesora
-- Índices necesarios para performance
-- Estructura inicial de las colecciones
+- 🔐 Login / Registro con JWT (acceso por whitelist de emails)
+- 🍽️ Registro diario de comidas: desayuno, colación mañana, almuerzo, merienda, cena y postre
+- 📋 Plan mensual: cargá las opciones de tu nutricionista por tipo de comida
+- ✨ Resumen semanal y mensual generado por IA (Groq / Llama 3.3 70B)
+- ⚖️ Registro de peso con gráfico de evolución
+- 🫁 Perfil de salud digestiva: intolerancias y condiciones (privado)
+- 😄 Estado de ánimo y notas diarias
+- 🔒 Datos de salud privados — nunca compartidos con terceros
 
 ---
 
-### 5. Correr en desarrollo local
+## Pantallas
 
-Necesitás `netlify-cli` instalado globalmente:
-
-```bash
-npm install -g netlify-cli
-```
-
-Luego:
-
-```bash
-netlify dev
-```
-
-Esto levanta React en el puerto 3000 y las Functions en el puerto 8888 simultáneamente.
+| Pantalla | Descripción |
+|---|---|
+| **Hoy** | Registrá tus comidas del día |
+| **Mi Plan** | Cargá las opciones del plan mensual |
+| **Historial** | Revisá registros + resumen IA semanal/mensual |
+| **Peso** | Gráfico de evolución de peso |
+| **Perfil** | Salud digestiva, intolerancias y datos personales |
 
 ---
 
-### 6. Deploy en Netlify
+## Base de datos — MongoDB Atlas
 
-#### Opción A — Desde la interfaz de Netlify (recomendado)
-1. Subís el proyecto a GitHub
-2. En Netlify: **Add new site → Import an existing project**
-3. Conectás el repositorio
-4. Build settings:
-   - Build command: `npm run build`
-   - Publish directory: `build`
-5. En **Site settings → Environment variables** agregás:
-   - `MONGODB_URI`
-   - `JWT_SECRET`
-   - `ANTHROPIC_API_KEY`
-6. Deploy!
+Base de datos: `nutrly` (cluster: SofiaDev)
 
-#### Opción B — Desde la terminal
-```bash
-netlify deploy --prod
-```
+| Colección | Descripción | Estado |
+|---|---|---|
+| `allowed_emails` | Emails habilitados para registrarse | ✅ Creada |
+| `users` | Usuarias registradas | ✅ Creada |
+| `daily_logs` | Registro diario de comidas | ✅ Creada |
+| `meal_plans` | Plan mensual por usuaria | Se crea al cargar el primer plan |
+| `weight_logs` | Historial de peso | Se crea al registrar el primer peso |
+| `ai_summaries` | Caché de resúmenes de IA (12hs) | Se crea al generar el primer resumen |
 
 ---
 
-## 📧 Gestión de acceso (emails habilitados)
+## Variables de entorno
 
-Los emails autorizados se guardan en la colección `allowed_emails` de MongoDB.
+Crear `.env.local` en la raíz con:
 
-Para agregar un email nuevo, podés usar MongoDB Compass o Atlas UI:
-
-```json
-{
-  "email": "nueva.usuaria@gmail.com",
-  "name": "Nombre de la usuaria",
-  "addedAt": { "$date": "2026-05-12T00:00:00Z" }
-}
+```
+MONGODB_URI=mongodb+srv://sdealessandre:PASSWORD@sofiadev.gt9diq0.mongodb.net/nutrly?appName=SofiaDev
+JWT_SECRET=tu_clave_secreta
+GROQ_API_KEY=gsk_...
 ```
 
-O ejecutar el script:
-```bash
-node scripts/add-email.js nueva.usuaria@gmail.com "Nombre Apellido"
-```
+En Netlify → **Site settings → Environment variables** cargar las mismas 3 variables.
 
 ---
 
-## 🗂️ Estructura del proyecto
+## Estructura del proyecto
 
 ```
-nutriapp/
+nutrly/
 ├── public/
 │   └── index.html
 ├── src/
@@ -142,73 +96,104 @@ nutriapp/
 │   │   ├── api.js        → Llamadas a Netlify Functions
 │   │   └── dates.js      → Helpers de fechas en español
 │   ├── App.js            → Rutas
-│   └── index.css         → Design tokens + estilos globales
+│   └── index.css         → Design tokens dark (violeta + aqua)
 ├── netlify/
 │   └── functions/
-│       ├── _db.js              → Conexión MongoDB compartida
+│       ├── _db.js              → Conexión MongoDB
 │       ├── auth-login.js       → POST /api/auth-login
 │       ├── auth-register.js    → POST /api/auth-register
 │       ├── meal-plans.js       → GET/POST /api/meal-plans
 │       ├── daily-logs.js       → GET/POST /api/daily-logs
 │       ├── weight-logs.js      → GET/POST/DELETE /api/weight-logs
 │       ├── profile.js          → GET/PUT /api/profile
-│       └── ai-summary.js       → POST /api/ai-summary (Claude API)
+│       └── ai-summary.js       → POST /api/ai-summary (Groq API)
 ├── scripts/
-│   ├── seed-mongodb.js         → Setup inicial de la base de datos
+│   ├── seed-mongodb.js         → Setup inicial de la BD
 │   └── add-email.js            → Agregar email habilitado
+├── .env.example
+├── .gitignore
 ├── netlify.toml
 └── package.json
 ```
 
 ---
 
-## 🗃️ Colecciones MongoDB
+## Gestión de acceso
 
-| Colección | Descripción |
-|---|---|
-| `users` | Usuarias registradas (sin passwordHash en respuestas) |
-| `allowed_emails` | Emails habilitados para registrarse |
-| `meal_plans` | Plan mensual por usuaria |
-| `daily_logs` | Registro diario de comidas |
-| `weight_logs` | Historial de peso |
-| `ai_summaries` | Caché de resúmenes de IA (válidos 12hs) |
+Los emails autorizados se guardan en la colección `allowed_emails`. Para agregar una usuaria nueva, insertar un documento en Atlas:
 
----
-
-## 🎨 Design tokens
-
-Los colores son variables CSS en `src/index.css`. Para cambiar la paleta:
-
-```css
-:root {
-  --color-primary: var(--mint-500);   /* Verde menta */
-  --color-accent:  var(--violet-500); /* Violeta */
-  --color-highlight: var(--berry-400); /* Frambuesa (frutilla) */
+```json
+{
+  "email": "nueva@email.com",
+  "name": "Nombre",
+  "addedAt": { "$date": "2026-05-12T00:00:00Z" }
 }
+```
+
+O usar el script:
+```bash
+node scripts/add-email.js nueva@email.com "Nombre Apellido"
 ```
 
 ---
 
-## 🔒 Privacidad y seguridad
+## Diseño
 
-- Passwords hasheados con bcrypt (salt 12)
-- Autenticación por JWT con expiración de 7 días
-- Datos de salud (condiciones digestivas, intolerancias, peso) son privados
-- Nunca se comparten con terceros
-- Solo la usuaria puede ver y editar sus datos
-- Sistema de whitelist: solo emails habilitados pueden registrarse
+**Paleta:** Violeta oscuro (`#0f0a24`) con detalles en verde aqua (`#00d4b4`) y violeta (`#9d5fff`).  
+Los colores son variables CSS en `src/index.css` — fácil de personalizar.
 
----
-
-## 🤖 Uso de Claude API
-
-La IA se usa en:
-- **Resumen semanal**: analiza los registros de comidas de la semana
-- **Resumen mensual**: análisis más profundo del mes
-- Considera las condiciones digestivas e intolerancias de la usuaria
-- Cache de 12hs para no repetir llamadas innecesarias
+**Responsive:** Mobile-first con 4 breakpoints:
+- 📱 Mobile (base)
+- 📱 Landscape (≥568px)
+- 📟 Tablet (≥768px) — nav lateral
+- 💻 Desktop (≥1024px) — nav expandida con labels
+- 🖥️ Large desktop (≥1440px)
 
 ---
 
-*Proyecto desarrollado para el programa esencIA — Google.org*  
-*Entrega: 12 de mayo de 2026*
+## Seguridad y privacidad
+
+- Contraseñas hasheadas con **bcrypt** (salt 12)
+- Autenticación por **JWT** con expiración de 7 días
+- Sistema de **whitelist**: solo emails habilitados pueden registrarse
+- Datos de salud **privados**: condiciones digestivas, intolerancias y peso solo visibles para la usuaria
+- **Nunca se comparten** datos con terceros
+
+---
+
+## Correr localmente
+
+```bash
+# 1. Instalar dependencias del frontend
+npm install
+
+# 2. Instalar dependencias del backend
+cd netlify/functions && npm install && cd ../..
+
+# 3. Crear .env.local con las variables de entorno
+
+# 4. Levantar en desarrollo
+npm run dev
+# → abre http://localhost:8888
+```
+
+> ⚠️ Para desarrollo local, conectarse al hotspot del celular si el WiFi bloquea el puerto de MongoDB.
+
+---
+
+## Deploy
+
+El proyecto se deploya automáticamente en Netlify al hacer push a `main`.
+
+Para deploy manual:
+```bash
+git add .
+git commit -m "descripción del cambio"
+git push
+```
+
+---
+
+*Proyecto desarrollado por Sofía De Alessandre para el programa esencIA — Google.org*  
+*Entrega: 12 de mayo de 2026*  
+*Desarrollado con React + Netlify Functions + MongoDB + Groq IA*
