@@ -11,7 +11,7 @@ async function connectDB() {
 }
 
 function getDB(client) {
-  return client.db("nutriapp");
+  return client.db("nutrly");
 }
 
 function corsHeaders() {
