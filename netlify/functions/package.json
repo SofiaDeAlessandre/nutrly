@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mongodb": "^6.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "@anthropic-ai/sdk": "^0.20.0"
+  }
+}
