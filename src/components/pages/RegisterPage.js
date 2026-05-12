@@ -41,7 +41,7 @@ export default function RegisterPage() {
       alignItems: 'center',
       justifyContent: 'center',
       padding: 'var(--space-6)',
-      background: 'linear-gradient(160deg, var(--mint-50) 0%, var(--violet-50) 100%)',
+      background: 'radial-gradient(ellipse at 20% 20%, rgba(0, 212, 180, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(157, 95, 255, 0.2) 0%, transparent 50%), var(--violet-950)',
     }}>
       <div style={{ width: '100%', maxWidth: '400px' }}>
         <div className="text-center mb-6">
@@ -52,7 +52,7 @@ export default function RegisterPage() {
           <p className="text-muted">Creá tu cuenta</p>
         </div>
 
-        <div className="card">
+        <<div className="card" style={{ background: 'rgba(26, 16, 53, 0.9)', backdropFilter: 'blur(16px)', border: '1px solid rgba(157, 95, 255, 0.25)' }}>
           <h2 className="section-title" style={{ marginBottom: 'var(--space-5)' }}>Registro</h2>
 
           {error && <div className="alert alert-error">{error}</div>}
